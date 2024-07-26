@@ -14,6 +14,11 @@ const app = express();
 
 app.use(express.json()); //to accept json data
 
+app.use('/' , (req , res)=>{ 
+     res.send("backend is running....");
+}) ;
+
+
 app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);

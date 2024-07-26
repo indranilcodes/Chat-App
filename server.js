@@ -14,6 +14,14 @@ const app = express();
 
 app.use(express.json()); //to accept json data
 
+const PORT = process.env.PORT;
+
+const server = app.listen(
+  PORT,
+  console.log(`Server running on PORT ${PORT}...`.yellow.bold)
+);
+
+
 
 const io = require("socket.io")(server, {
   pingTimeout: 60000,
@@ -37,13 +45,6 @@ app.use("/api/message", messageRoutes);
 // Error Handling middlewares
 app.use(notFound);
 app.use(errorHandler);
-
-const PORT = process.env.PORT;
-
-const server = app.listen(
-  PORT,
-  console.log(`Server running on PORT ${PORT}...`.yellow.bold)
-);
 
 
 

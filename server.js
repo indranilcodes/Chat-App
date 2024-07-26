@@ -1,6 +1,7 @@
 const express = require("express");
 const connectDB = require("./config/db");
 const dotenv = require("dotenv");
+const cors = require("cors"); // Import cors
 const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const messageRoutes = require("./routes/messageRoutes");
@@ -12,7 +13,13 @@ dotenv.config();
 connectDB();
 const app = express();
 
-app.use(express.json()); //to accept json data
+app.use(express.json()); // to accept json data
+
+// Use the cors middleware
+app.use(cors({
+  origin: 'https://indranil-chatapp.vercel.app',
+  credentials: true,
+}));
 
 const PORT = process.env.PORT;
 
@@ -21,33 +28,25 @@ const server = app.listen(
   console.log(`Server running on PORT ${PORT}...`.yellow.bold)
 );
 
-
-
 const io = require("socket.io")(server, {
   pingTimeout: 60000,
   cors: {
-    origin: "*",
+    origin: 'https://indranil-chatapp.vercel.app',
     credentials: true,
   },
 });
 
-
-app.use('/' , (req , res)=>{ 
-     res.send("backend is running....");
-}) ;
-
+app.use('/', (req, res) => {
+  res.send("backend is running....");
+});
 
 app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
 
-
 // Error Handling middlewares
 app.use(notFound);
 app.use(errorHandler);
-
-
-
 
 io.on("connection", (socket) => {
   console.log("Connected to socket.io");

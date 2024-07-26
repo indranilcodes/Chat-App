@@ -14,6 +14,16 @@ const app = express();
 
 app.use(express.json()); //to accept json data
 
+
+const io = require("socket.io")(server, {
+  pingTimeout: 60000,
+  cors: {
+    origin: "*",
+    credentials: true,
+  },
+});
+
+
 app.use('/' , (req , res)=>{ 
      res.send("backend is running....");
 }) ;
@@ -35,13 +45,7 @@ const server = app.listen(
   console.log(`Server running on PORT ${PORT}...`.yellow.bold)
 );
 
-const io = require("socket.io")(server, {
-  pingTimeout: 60000,
-  cors: {
-    origin: "https://indranil-chatapp.vercel.app",
-    //credentials: true,
-  },
-});
+
 
 
 io.on("connection", (socket) => {
